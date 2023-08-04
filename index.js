@@ -12,7 +12,8 @@ require("dotenv").config();
 
 /* ########### Mongodb ########### */
 mongoose.set("strictQuery", false);
-mongoose.connect("mongodb://127.0.0.1:27017/todo-app");
+// mongoose.connect("mongodb://127.0.0.1:27017/todo-app");
+mongoose.connect(process.env.DB);
 const db = mongoose.connection;
 db.on("error", (e) => {
   console.log("not connected: ", e);

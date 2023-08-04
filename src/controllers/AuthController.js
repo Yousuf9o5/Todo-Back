@@ -7,7 +7,9 @@ const Key = process.env.SECRET_KEY;
 
 function authenticateUser(req, res) {
   const encoded = jwt.sign({ userId: req.user.id }, Key);
-  res.redirect(`http://localhost:5173/?token=${encoded}`);
+  res.redirect(
+    `https://main--velvety-crepe-d210ac.netlify.app/?token=${encoded}`
+  );
 }
 
 async function LoginById(req, res) {

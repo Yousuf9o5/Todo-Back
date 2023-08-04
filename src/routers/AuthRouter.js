@@ -20,7 +20,7 @@ router.get(
 router.get(
   "/google/redirectURL",
   passport.authenticate("google", {
-    failureRedirect: "http://localhost:5173/login",
+    failureRedirect: "/",
   }),
   authenticateUser
 );
@@ -32,7 +32,7 @@ router.get("/logout/:id", (req, res) => {
     if (err) {
       console.log("Error destroying session:", err);
     }
-    res.redirect("http://localhost:5173/login");
+    res.redirect("https://main--velvety-crepe-d210ac.netlify.app");
   });
 });
 

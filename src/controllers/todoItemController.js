@@ -4,14 +4,14 @@ const DataValidator = require("../utils/Validator");
 
 async function GetAllTodoes(req, res) {
   try {
-    const { completed, important } = req.query;
+    const { completed, important, email } = req.query;
     let data;
 
     if ((completed && important) != undefined) {
       data = await todoItems.find({ completed, important });
       return res.status(200).json(response(200, "Done", data));
     }
-    data = await todoItems.find();
+    data = await todoItems.find({ for: email });
 
     return res.status(200).json(response(200, "Done", data));
   } catch (err) {
@@ -33,27 +33,39 @@ async function TodoType(req, res) {
 
 async function NewTodo(req, res) {
   try {
+    let email = req.query.email;
     let { title, date, important, folder } = req.body;
-
     if (!DataValidator(title, date)) {
       return res.status(400).json(response(400, "Invalid Data"));
     }
 
-    if (new Date(date).getTime() < Date.now()) {
+    const dateChecker = () => {
+      let today = new Date(Date.now());
+      let comingDate = date.split("-");
+      let splitToday = [
+        today.getFullYear(),
+        today.getMonth() + 1,
+        today.getUTCDate(),
+      ];
+
+      return splitToday.every((item, i) => {
+        return item > comingDate[i] ? true : false;
+      });
+    };
+
+    console.log(dateChecker());
+
+    if (dateChecker()) {
+      console.log(new Date(date).getTime() + 10000, Date.now());
       return res.status(400).json(response(400, "Invalid Date"));
     }
-    console.log(date);
-    let formattedDate = () => {
-      let newDate = date.split("-");
-      newDate[2] = (1 + +newDate[2]).toString();
-      return newDate.join("-");
-    };
 
     const newItem = new todoItems({
       title,
-      date: formattedDate(),
+      date: date,
       important: important || false,
       folder: folder || null,
+      for: email,
     });
 
     await newItem.save();

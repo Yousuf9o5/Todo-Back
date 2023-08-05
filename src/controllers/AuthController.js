@@ -2,14 +2,12 @@ const jwt = require("jsonwebtoken");
 const response = require("../utils/util");
 const GoogleAccount = require("../models/GoogleAccount");
 require("dotenv").config();
-
+const { current } = require("../../.dev.json");
 const Key = process.env.SECRET_KEY;
 
 function authenticateUser(req, res) {
   const encoded = jwt.sign({ userId: req.user.id }, Key);
-  res.redirect(
-    `https://main--velvety-crepe-d210ac.netlify.app/?token=${encoded}`
-  );
+  res.redirect(`${current.redirect}/?token=${encoded}`);
 }
 
 async function LoginById(req, res) {

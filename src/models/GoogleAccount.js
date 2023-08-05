@@ -6,7 +6,10 @@ const GoogleAccount = mongoose.Schema({
     unique: true,
   },
   fullname: String,
-  email: String,
+  email: {
+    type: String,
+    unique: true,
+  },
   profilePic: String,
   todoes: {
     type: Array,

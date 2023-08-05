@@ -25,11 +25,12 @@ const TodoItem = new Schema(
       default: false,
     },
     folder: {
-      type: mongoose.Schema.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       default: null,
     },
+    for: String,
   },
-  { strict: true, timestamps: true }
+  { timestamps: true }
 );
 
 module.exports = mongoose.model("todoItem", TodoItem);

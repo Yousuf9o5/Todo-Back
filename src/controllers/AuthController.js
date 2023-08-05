@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const response = require("../utils/util");
 const GoogleAccount = require("../models/GoogleAccount");
 require("dotenv").config();
-const { current } = require("../../.dev.json");
+const { current } = require("../../dev.json");
 const Key = process.env.SECRET_KEY;
 
 function authenticateUser(req, res) {

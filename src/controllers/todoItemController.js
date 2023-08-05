@@ -53,10 +53,7 @@ async function NewTodo(req, res) {
       });
     };
 
-    console.log(dateChecker());
-
     if (dateChecker()) {
-      console.log(new Date(date).getTime() + 10000, Date.now());
       return res.status(400).json(response(400, "Invalid Date"));
     }
 
@@ -101,8 +98,6 @@ async function UpdateById(req, res) {
     item.important = important === undefined ? item.important : important;
     item.completed = completed === undefined ? item.completed : completed;
     item.folder = folder || item.folder;
-
-    console.log(item);
 
     await item.save();
 

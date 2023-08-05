@@ -7,6 +7,7 @@ const Key = process.env.SECRET_KEY;
 
 function authenticateUser(req, res) {
   const encoded = jwt.sign({ userId: req.user.id }, Key);
+  console.log("ok");
   res.redirect(`${current.redirect}/?token=${encoded}`);
 }
 

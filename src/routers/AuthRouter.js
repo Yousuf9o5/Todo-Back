@@ -1,8 +1,6 @@
 const router = require("express").Router();
-const jwt = require("jsonwebtoken");
 const passport = require("passport");
-const response = require("../utils/util");
-const GoogleAccount = require("../models/GoogleAccount");
+
 const {
   authenticateUser,
   LoginById,

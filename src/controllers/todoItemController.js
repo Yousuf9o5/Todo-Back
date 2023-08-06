@@ -23,9 +23,10 @@ async function TodoType(req, res) {
   try {
     const data = await todoItems.find({
       ItemType: req.query.type,
+      for: req.query.email,
     });
 
-    return res.status(200).json(response(200, "Done", data));
+    return res.status(200).json(response(200, `Done`, data));
   } catch (err) {
     return res.status(500).json(response(500, "Server Side Error"));
   }
@@ -34,10 +35,12 @@ async function TodoType(req, res) {
 async function NewTodo(req, res) {
   try {
     let email = req.query.email;
-    let { title, date, important, folder } = req.body;
+    let { title, date, important, folder, type } = req.body;
     if (!DataValidator(title, date)) {
       return res.status(400).json(response(400, "Invalid Data"));
     }
+
+    console.log(req.body);
 
     const dateChecker = () => {
       let today = new Date(Date.now());
@@ -61,6 +64,7 @@ async function NewTodo(req, res) {
       title,
       date: date,
       important: important || false,
+      ItemType: type || null,
       folder: folder || null,
       for: email,
     });
@@ -111,11 +115,28 @@ async function UpdateById(req, res) {
   }
 }
 
-async function DeleteById() {
+async function GetCount(req, res) {
   try {
-    await todoItems.findByIdAndDelete(req.params.id);
+    const completed = await todoItems.countDocuments({ completed: "true" });
+    const important = await todoItems.countDocuments({ important: "true" });
+    const task = await todoItems.countDocuments({ ItemType: "task" });
+    const plan = await todoItems.countDocuments({ ItemType: "plan" });
+
+    return res
+      .status(200)
+      .json(response(200, "Done", { completed, important, task, plan }));
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json(response(500, "Server Side Error"));
+  }
+}
+
+async function DeleteById(req, res) {
+  try {
+    await todoItems.deleteOne({ _id: req.params.id });
     return res.status(200).json(response(200, "Deleted", true));
   } catch (err) {
+    console.log(err);
     return res.status(500).json(response(500, "Server Side Error"));
   }
 }
@@ -125,4 +146,6 @@ module.exports = {
   NewTodo,
   UpdateById,
   TodoType,
+  DeleteById,
+  GetCount,
 };

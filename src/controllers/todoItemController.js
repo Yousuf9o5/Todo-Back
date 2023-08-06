@@ -8,10 +8,10 @@ async function GetAllTodoes(req, res) {
     let data;
 
     if ((completed && important) != undefined) {
-      data = await todoItems.find({ completed, important });
+      data = await todoItems.find({ completed, important, for: email });
       return res.status(200).json(response(200, "Done", data));
     }
-    data = await todoItems.find({ for: email });
+    data = await todoItems.find({ for: email, completed: false });
 
     return res.status(200).json(response(200, "Done", data));
   } catch (err) {
@@ -77,8 +77,8 @@ async function NewTodo(req, res) {
 async function UpdateById(req, res) {
   try {
     let { title, date, important, completed, folder } = req.body;
-
     let item = await todoItems.findById(req.params.id);
+
     if (!item) {
       return res.status(404).json(response(404, "Not Found"));
     }
@@ -88,6 +88,9 @@ async function UpdateById(req, res) {
     }
 
     let formattedDate = () => {
+      if (!date) {
+        return;
+      }
       let newDate = date.split("-");
       newDate[2] = (1 + +newDate[2]).toString();
       return newDate.join("-");
